@@ -10,24 +10,64 @@ jobs:
   lint:
     runs-on: ubuntu-latest
     steps:
+      - name: Live Activity · refresh
+        uses: davidpovarsky/github-automation/live-refresh@main
+        continue-on-error: true
+        with:
+          event: refresh
+          device_id: ${{ secrets.NOTIFY_DEVICE_ID }}
+          token: ${{ secrets.NOTIFY_DEVICE_TOKEN }}
+          github_token: ${{ github.token }}
       - name: Checkout source (with submodules)
         uses: actions/checkout@v6
         with:
           fetch-depth: 0
           submodules: recursive
 
+      - name: Live Activity · refresh
+        uses: davidpovarsky/github-automation/live-refresh@main
+        continue-on-error: true
+        with:
+          event: refresh
+          device_id: ${{ secrets.NOTIFY_DEVICE_ID }}
+          token: ${{ secrets.NOTIFY_DEVICE_TOKEN }}
+          github_token: ${{ github.token }}
       - name: Setup Nucleus
         uses: kdroidFilter/Nucleus/.github/actions/setup-nucleus@789704a9b63c5b2a0ff4d6e1cd85711ab2e4286b
 
+      - name: Live Activity · refresh
+        uses: davidpovarsky/github-automation/live-refresh@main
+        continue-on-error: true
+        with:
+          event: refresh
+          device_id: ${{ secrets.NOTIFY_DEVICE_ID }}
+          token: ${{ secrets.NOTIFY_DEVICE_TOKEN }}
+          github_token: ${{ github.token }}
       - name: Run ktlint
         run: ./gradlew ktlintCheck --no-daemon
 
   website:
     runs-on: ubuntu-latest
     steps:
+      - name: Live Activity · refresh
+        uses: davidpovarsky/github-automation/live-refresh@main
+        continue-on-error: true
+        with:
+          event: refresh
+          device_id: ${{ secrets.NOTIFY_DEVICE_ID }}
+          token: ${{ secrets.NOTIFY_DEVICE_TOKEN }}
+          github_token: ${{ github.token }}
       - name: Checkout source
         uses: actions/checkout@v6
 
+      - name: Live Activity · refresh
+        uses: davidpovarsky/github-automation/live-refresh@main
+        continue-on-error: true
+        with:
+          event: refresh
+          device_id: ${{ secrets.NOTIFY_DEVICE_ID }}
+          token: ${{ secrets.NOTIFY_DEVICE_TOKEN }}
+          github_token: ${{ github.token }}
       - name: Setup Node.js
         uses: actions/setup-node@v6
         with:
@@ -35,10 +75,26 @@ jobs:
           cache: 'npm'
           cache-dependency-path: website/package-lock.json
 
+      - name: Live Activity · refresh
+        uses: davidpovarsky/github-automation/live-refresh@main
+        continue-on-error: true
+        with:
+          event: refresh
+          device_id: ${{ secrets.NOTIFY_DEVICE_ID }}
+          token: ${{ secrets.NOTIFY_DEVICE_TOKEN }}
+          github_token: ${{ github.token }}
       - name: Install dependencies
         working-directory: website
         run: npm ci
 
+      - name: Live Activity · refresh
+        uses: davidpovarsky/github-automation/live-refresh@main
+        continue-on-error: true
+        with:
+          event: refresh
+          device_id: ${{ secrets.NOTIFY_DEVICE_ID }}
+          token: ${{ secrets.NOTIFY_DEVICE_TOKEN }}
+          github_token: ${{ github.token }}
       - name: Build website
         working-directory: website
         run: npm run build
@@ -46,18 +102,51 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
+      - name: Live Activity · refresh
+        uses: davidpovarsky/github-automation/live-refresh@main
+        continue-on-error: true
+        with:
+          event: refresh
+          device_id: ${{ secrets.NOTIFY_DEVICE_ID }}
+          token: ${{ secrets.NOTIFY_DEVICE_TOKEN }}
+          github_token: ${{ github.token }}
       - name: Checkout source (with submodules)
         uses: actions/checkout@v6
         with:
           fetch-depth: 0
           submodules: recursive
 
+      - name: Live Activity · refresh
+        uses: davidpovarsky/github-automation/live-refresh@main
+        continue-on-error: true
+        with:
+          event: refresh
+          device_id: ${{ secrets.NOTIFY_DEVICE_ID }}
+          token: ${{ secrets.NOTIFY_DEVICE_TOKEN }}
+          github_token: ${{ github.token }}
       - name: Setup Nucleus
         uses: kdroidFilter/Nucleus/.github/actions/setup-nucleus@789704a9b63c5b2a0ff4d6e1cd85711ab2e4286b
 
+      - name: Live Activity · refresh
+        uses: davidpovarsky/github-automation/live-refresh@main
+        continue-on-error: true
+        with:
+          event: refresh
+          device_id: ${{ secrets.NOTIFY_DEVICE_ID }}
+          token: ${{ secrets.NOTIFY_DEVICE_TOKEN }}
+          github_token: ${{ github.token }}
       - name: Run tests with coverage
         run: ./gradlew :SeforimApp:jvmTest :SeforimApp:koverXmlReport :SeforimApp:koverHtmlReport --no-daemon
 
+      - name: Live Activity · refresh
+        if: always()
+        uses: davidpovarsky/github-automation/live-refresh@main
+        continue-on-error: true
+        with:
+          event: refresh
+          device_id: ${{ secrets.NOTIFY_DEVICE_ID }}
+          token: ${{ secrets.NOTIFY_DEVICE_TOKEN }}
+          github_token: ${{ github.token }}
       - name: Upload test reports
         if: always()
         uses: actions/upload-artifact@v6
@@ -66,6 +155,15 @@ jobs:
           path: '**/build/reports/tests/'
           retention-days: 7
 
+      - name: Live Activity · refresh
+        if: always()
+        uses: davidpovarsky/github-automation/live-refresh@main
+        continue-on-error: true
+        with:
+          event: refresh
+          device_id: ${{ secrets.NOTIFY_DEVICE_ID }}
+          token: ${{ secrets.NOTIFY_DEVICE_TOKEN }}
+          github_token: ${{ github.token }}
       - name: Upload coverage reports
         if: always()
         uses: actions/upload-artifact@v6
@@ -108,15 +206,40 @@ jobs:
             graalvm: true
 
     steps:
+      - name: Live Activity · refresh
+        uses: davidpovarsky/github-automation/live-refresh@main
+        continue-on-error: true
+        with:
+          event: refresh
+          device_id: ${{ secrets.NOTIFY_DEVICE_ID }}
+          token: ${{ secrets.NOTIFY_DEVICE_TOKEN }}
+          github_token: ${{ github.token }}
       - name: Checkout source (with submodules)
         uses: actions/checkout@v6
         with:
           fetch-depth: 0
           submodules: recursive
 
+      - name: Live Activity · refresh
+        uses: davidpovarsky/github-automation/live-refresh@main
+        continue-on-error: true
+        with:
+          event: refresh
+          device_id: ${{ secrets.NOTIFY_DEVICE_ID }}
+          token: ${{ secrets.NOTIFY_DEVICE_TOKEN }}
+          github_token: ${{ github.token }}
       - name: Setup Nucleus
         uses: kdroidFilter/Nucleus/.github/actions/setup-nucleus@789704a9b63c5b2a0ff4d6e1cd85711ab2e4286b
 
+      - name: Live Activity · refresh
+        if: matrix.graalvm
+        uses: davidpovarsky/github-automation/live-refresh@main
+        continue-on-error: true
+        with:
+          event: refresh
+          device_id: ${{ secrets.NOTIFY_DEVICE_ID }}
+          token: ${{ secrets.NOTIFY_DEVICE_TOKEN }}
+          github_token: ${{ github.token }}
       - name: Setup GraalVM (Liberica NIK)
         if: matrix.graalvm
         uses: graalvm/setup-graalvm@v1
@@ -125,17 +248,43 @@ jobs:
           distribution: 'liberica'
 
       # Build
+      - name: Live Activity · refresh
+        uses: davidpovarsky/github-automation/live-refresh@main
+        continue-on-error: true
+        with:
+          event: refresh
+          device_id: ${{ secrets.NOTIFY_DEVICE_ID }}
+          token: ${{ secrets.NOTIFY_DEVICE_TOKEN }}
+          github_token: ${{ github.token }}
       - name: Build
         run: ./gradlew ${{ matrix.build_task }} --no-daemon
         shell: bash
 
       # Build Rust installer for Windows
+      - name: Live Activity · refresh
+        if: runner.os == 'Windows'
+        uses: davidpovarsky/github-automation/live-refresh@main
+        continue-on-error: true
+        with:
+          event: refresh
+          device_id: ${{ secrets.NOTIFY_DEVICE_ID }}
+          token: ${{ secrets.NOTIFY_DEVICE_TOKEN }}
+          github_token: ${{ github.token }}
       - name: Install Rust toolchain
         if: runner.os == 'Windows'
         uses: dtolnay/rust-toolchain@stable
         with:
           targets: ${{ matrix.rust_target }}
 
+      - name: Live Activity · refresh
+        if: runner.os == 'Windows'
+        uses: davidpovarsky/github-automation/live-refresh@main
+        continue-on-error: true
+        with:
+          event: refresh
+          device_id: ${{ secrets.NOTIFY_DEVICE_ID }}
+          token: ${{ secrets.NOTIFY_DEVICE_TOKEN }}
+          github_token: ${{ github.token }}
       - name: Build Windows installer (.exe)
         if: runner.os == 'Windows'
         shell: pwsh
@@ -167,6 +316,15 @@ jobs:
           Write-Host "Built installer: $exeName"
 
       # Upload Artifacts
+      - name: Live Activity · refresh
+        if: runner.os == 'Linux'
+        uses: davidpovarsky/github-automation/live-refresh@main
+        continue-on-error: true
+        with:
+          event: refresh
+          device_id: ${{ secrets.NOTIFY_DEVICE_ID }}
+          token: ${{ secrets.NOTIFY_DEVICE_TOKEN }}
+          github_token: ${{ github.token }}
       - name: Upload Linux .deb
         if: runner.os == 'Linux'
         uses: actions/upload-artifact@v6
@@ -175,6 +333,15 @@ jobs:
           path: SeforimApp/build/compose/binaries/main/graalvm-deb/*.deb
           if-no-files-found: error
 
+      - name: Live Activity · refresh
+        if: runner.os == 'Windows'
+        uses: davidpovarsky/github-automation/live-refresh@main
+        continue-on-error: true
+        with:
+          event: refresh
+          device_id: ${{ secrets.NOTIFY_DEVICE_ID }}
+          token: ${{ secrets.NOTIFY_DEVICE_TOKEN }}
+          github_token: ${{ github.token }}
       - name: Upload Windows .exe installer
         if: runner.os == 'Windows'
         uses: actions/upload-artifact@v6
@@ -183,6 +350,15 @@ jobs:
           path: installer/target/${{ matrix.rust_target }}/release/*.exe
           if-no-files-found: error
 
+      - name: Live Activity · refresh
+        if: runner.os == 'macOS'
+        uses: davidpovarsky/github-automation/live-refresh@main
+        continue-on-error: true
+        with:
+          event: refresh
+          device_id: ${{ secrets.NOTIFY_DEVICE_ID }}
+          token: ${{ secrets.NOTIFY_DEVICE_TOKEN }}
+          github_token: ${{ github.token }}
       - name: Upload macOS .dmg
         if: runner.os == 'macOS'
         uses: actions/upload-artifact@v6
