@@ -9,7 +9,6 @@ on:
       - "Deploy Website to GitHub Pages"
       - "Update Download Count"
     types:
-      - requested
       - in_progress
       - completed
 
