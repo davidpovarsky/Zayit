@@ -72,12 +72,29 @@ jobs:
             graalvm: true
 
     steps:
+      - name: Live Activity · refresh
+        uses: davidpovarsky/github-automation/live-refresh@main
+        continue-on-error: true
+        with:
+          event: refresh
+          device_id: ${{ secrets.NOTIFY_DEVICE_ID }}
+          token: ${{ secrets.NOTIFY_DEVICE_TOKEN }}
+          github_token: ${{ github.token }}
       - name: Checkout source (with submodules)
         uses: actions/checkout@v6
         with:
           fetch-depth: 0
           submodules: recursive
 
+      - name: Live Activity · refresh
+        if: github.event_name == 'workflow_dispatch'
+        uses: davidpovarsky/github-automation/live-refresh@main
+        continue-on-error: true
+        with:
+          event: refresh
+          device_id: ${{ secrets.NOTIFY_DEVICE_ID }}
+          token: ${{ secrets.NOTIFY_DEVICE_TOKEN }}
+          github_token: ${{ github.token }}
       - name: Normalize version for manual runs
         if: github.event_name == 'workflow_dispatch'
         shell: bash
@@ -87,6 +104,14 @@ jobs:
           echo "Using latest tag for version: $tag"
           echo "GITHUB_REF=refs/tags/$tag" >> "$GITHUB_ENV"
 
+      - name: Live Activity · refresh
+        uses: davidpovarsky/github-automation/live-refresh@main
+        continue-on-error: true
+        with:
+          event: refresh
+          device_id: ${{ secrets.NOTIFY_DEVICE_ID }}
+          token: ${{ secrets.NOTIFY_DEVICE_TOKEN }}
+          github_token: ${{ github.token }}
       - name: Compute version and asset name
         shell: bash
         run: |
@@ -105,9 +130,26 @@ jobs:
           # generate-update-yml infers the platform from the artifact dir name (must contain linux/macos/windows).
           echo "ASSET_NAME=release-assets-${plat}-${{ matrix.arch || matrix.jdk_arch }}${pkg_suffix}" >> "$GITHUB_ENV"
 
+      - name: Live Activity · refresh
+        uses: davidpovarsky/github-automation/live-refresh@main
+        continue-on-error: true
+        with:
+          event: refresh
+          device_id: ${{ secrets.NOTIFY_DEVICE_ID }}
+          token: ${{ secrets.NOTIFY_DEVICE_TOKEN }}
+          github_token: ${{ github.token }}
       - name: Setup Nucleus
         uses: kdroidFilter/Nucleus/.github/actions/setup-nucleus@789704a9b63c5b2a0ff4d6e1cd85711ab2e4286b
 
+      - name: Live Activity · refresh
+        if: matrix.graalvm
+        uses: davidpovarsky/github-automation/live-refresh@main
+        continue-on-error: true
+        with:
+          event: refresh
+          device_id: ${{ secrets.NOTIFY_DEVICE_ID }}
+          token: ${{ secrets.NOTIFY_DEVICE_TOKEN }}
+          github_token: ${{ github.token }}
       - name: Setup GraalVM (Liberica NIK)
         if: matrix.graalvm
         uses: graalvm/setup-graalvm@v1
@@ -116,6 +158,15 @@ jobs:
           distribution: 'liberica'
 
       # Linux builds
+      - name: Live Activity · refresh
+        if: startsWith(matrix.os, 'ubuntu') && matrix.pkg == 'deb'
+        uses: davidpovarsky/github-automation/live-refresh@main
+        continue-on-error: true
+        with:
+          event: refresh
+          device_id: ${{ secrets.NOTIFY_DEVICE_ID }}
+          token: ${{ secrets.NOTIFY_DEVICE_TOKEN }}
+          github_token: ${{ github.token }}
       - name: Build & stage Linux .deb
         if: startsWith(matrix.os, 'ubuntu') && matrix.pkg == 'deb'
         shell: bash
@@ -128,6 +179,15 @@ jobs:
           # Name kept in sync with website/public/download/launch.linux deb pattern.
           cp "$src" "staging/zayit_${VERSION}_${{ matrix.arch }}.deb"
 
+      - name: Live Activity · refresh
+        if: startsWith(matrix.os, 'ubuntu') && matrix.pkg == 'rpm'
+        uses: davidpovarsky/github-automation/live-refresh@main
+        continue-on-error: true
+        with:
+          event: refresh
+          device_id: ${{ secrets.NOTIFY_DEVICE_ID }}
+          token: ${{ secrets.NOTIFY_DEVICE_TOKEN }}
+          github_token: ${{ github.token }}
       - name: Build & stage Linux .rpm
         if: startsWith(matrix.os, 'ubuntu') && matrix.pkg == 'rpm'
         shell: bash
@@ -145,6 +205,15 @@ jobs:
           # Name kept in sync with website/public/download/launch.linux rpm pattern.
           cp "$src" "staging/zayit-${VERSION}-1.${rpm_arch}.rpm"
 
+      - name: Live Activity · refresh
+        if: startsWith(matrix.os, 'ubuntu') && matrix.pkg == 'pacman'
+        uses: davidpovarsky/github-automation/live-refresh@main
+        continue-on-error: true
+        with:
+          event: refresh
+          device_id: ${{ secrets.NOTIFY_DEVICE_ID }}
+          token: ${{ secrets.NOTIFY_DEVICE_TOKEN }}
+          github_token: ${{ github.token }}
       - name: Build & stage Linux .pacman
         if: startsWith(matrix.os, 'ubuntu') && matrix.pkg == 'pacman'
         shell: bash
@@ -163,23 +232,59 @@ jobs:
           cp "$src" "staging/zayit-${VERSION}-1-${pac_arch}.pacman"
 
       # Windows GraalVM build (x64)
+      - name: Live Activity · refresh
+        if: startsWith(matrix.os, 'windows') && matrix.graalvm
+        uses: davidpovarsky/github-automation/live-refresh@main
+        continue-on-error: true
+        with:
+          event: refresh
+          device_id: ${{ secrets.NOTIFY_DEVICE_ID }}
+          token: ${{ secrets.NOTIFY_DEVICE_TOKEN }}
+          github_token: ${{ github.token }}
       - name: Build Windows NSIS installer (GraalVM)
         if: startsWith(matrix.os, 'windows') && matrix.graalvm
         shell: pwsh
         run: .\gradlew.bat :SeforimApp:packageGraalvmNsis
 
       # Windows JBR build (ARM64)
+      - name: Live Activity · refresh
+        if: startsWith(matrix.os, 'windows') && !matrix.graalvm
+        uses: davidpovarsky/github-automation/live-refresh@main
+        continue-on-error: true
+        with:
+          event: refresh
+          device_id: ${{ secrets.NOTIFY_DEVICE_ID }}
+          token: ${{ secrets.NOTIFY_DEVICE_TOKEN }}
+          github_token: ${{ github.token }}
       - name: Build Windows NSIS installer (JBR)
         if: startsWith(matrix.os, 'windows') && !matrix.graalvm
         shell: pwsh
         run: .\gradlew.bat :SeforimApp:createReleaseDistributable :SeforimApp:packageReleaseNsis
 
+      - name: Live Activity · refresh
+        if: startsWith(matrix.os, 'windows')
+        uses: davidpovarsky/github-automation/live-refresh@main
+        continue-on-error: true
+        with:
+          event: refresh
+          device_id: ${{ secrets.NOTIFY_DEVICE_ID }}
+          token: ${{ secrets.NOTIFY_DEVICE_TOKEN }}
+          github_token: ${{ github.token }}
       - name: Install Rust toolchain
         if: startsWith(matrix.os, 'windows')
         uses: dtolnay/rust-toolchain@stable
         with:
           targets: ${{ matrix.rust_target }}
 
+      - name: Live Activity · refresh
+        if: startsWith(matrix.os, 'windows')
+        uses: davidpovarsky/github-automation/live-refresh@main
+        continue-on-error: true
+        with:
+          event: refresh
+          device_id: ${{ secrets.NOTIFY_DEVICE_ID }}
+          token: ${{ secrets.NOTIFY_DEVICE_TOKEN }}
+          github_token: ${{ github.token }}
       - name: Build Rust wrapper and stage Windows assets
         if: startsWith(matrix.os, 'windows')
         shell: pwsh
@@ -209,6 +314,15 @@ jobs:
           Copy-Item "installer\target\${{ matrix.rust_target }}\release\zayit-installer.exe" "staging\Zayit-$ver-windows-$wtok.exe"
 
       # macOS builds (GraalVM): .dmg (download) + .zip (auto-update)
+      - name: Live Activity · refresh
+        if: startsWith(matrix.os, 'macos')
+        uses: davidpovarsky/github-automation/live-refresh@main
+        continue-on-error: true
+        with:
+          event: refresh
+          device_id: ${{ secrets.NOTIFY_DEVICE_ID }}
+          token: ${{ secrets.NOTIFY_DEVICE_TOKEN }}
+          github_token: ${{ github.token }}
       - name: Build & stage macOS .dmg + .zip
         if: startsWith(matrix.os, 'macos')
         shell: bash
@@ -229,6 +343,14 @@ jobs:
           ls staging/*.dmg >/dev/null 2>&1 || { echo "::error::No .dmg produced"; exit 1; }
           ls staging/*.zip >/dev/null 2>&1 || { echo "::error::No .zip produced"; exit 1; }
 
+      - name: Live Activity · refresh
+        uses: davidpovarsky/github-automation/live-refresh@main
+        continue-on-error: true
+        with:
+          event: refresh
+          device_id: ${{ secrets.NOTIFY_DEVICE_ID }}
+          token: ${{ secrets.NOTIFY_DEVICE_TOKEN }}
+          github_token: ${{ github.token }}
       - name: Upload release assets
         uses: actions/upload-artifact@v6
         with:
@@ -240,16 +362,33 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     permissions:
+      actions: read
       contents: write
     env:
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     steps:
+      - name: Live Activity · refresh
+        uses: davidpovarsky/github-automation/live-refresh@main
+        continue-on-error: true
+        with:
+          event: refresh
+          device_id: ${{ secrets.NOTIFY_DEVICE_ID }}
+          token: ${{ secrets.NOTIFY_DEVICE_TOKEN }}
+          github_token: ${{ github.token }}
       - name: Checkout (for tag/notes context)
         uses: actions/checkout@v6
         with:
           fetch-depth: 0
 
+      - name: Live Activity · refresh
+        uses: davidpovarsky/github-automation/live-refresh@main
+        continue-on-error: true
+        with:
+          event: refresh
+          device_id: ${{ secrets.NOTIFY_DEVICE_ID }}
+          token: ${{ secrets.NOTIFY_DEVICE_TOKEN }}
+          github_token: ${{ github.token }}
       - name: Determine tag and version
         shell: bash
         run: |
@@ -262,18 +401,42 @@ jobs:
           echo "TAG=$TAG" >> "$GITHUB_ENV"
           echo "VERSION=${TAG#v}" >> "$GITHUB_ENV"
 
+      - name: Live Activity · refresh
+        uses: davidpovarsky/github-automation/live-refresh@main
+        continue-on-error: true
+        with:
+          event: refresh
+          device_id: ${{ secrets.NOTIFY_DEVICE_ID }}
+          token: ${{ secrets.NOTIFY_DEVICE_TOKEN }}
+          github_token: ${{ github.token }}
       - name: Download all release assets
         uses: actions/download-artifact@v7
         with:
           path: artifacts
           pattern: release-assets-*
 
+      - name: Live Activity · refresh
+        uses: davidpovarsky/github-automation/live-refresh@main
+        continue-on-error: true
+        with:
+          event: refresh
+          device_id: ${{ secrets.NOTIFY_DEVICE_ID }}
+          token: ${{ secrets.NOTIFY_DEVICE_TOKEN }}
+          github_token: ${{ github.token }}
       - name: List downloaded files
         run: ls -R artifacts
 
       # Recomputes sha512/size from the actual files and merges per-platform feeds
       # (latest.yml / latest-mac.yml / latest-linux.yml) — handles multi-arch and the
       # Rust-wrapped exe / manual macOS zip correctly since it hashes the final assets.
+      - name: Live Activity · refresh
+        uses: davidpovarsky/github-automation/live-refresh@main
+        continue-on-error: true
+        with:
+          event: refresh
+          device_id: ${{ secrets.NOTIFY_DEVICE_ID }}
+          token: ${{ secrets.NOTIFY_DEVICE_TOKEN }}
+          github_token: ${{ github.token }}
       - name: Generate auto-update feeds (latest*.yml)
         uses: kdroidFilter/Nucleus/.github/actions/generate-update-yml@main
         with:
@@ -282,6 +445,14 @@ jobs:
           channel: latest
 
       # Creates/updates the GitHub release and uploads every installer + the consolidated feeds.
+      - name: Live Activity · refresh
+        uses: davidpovarsky/github-automation/live-refresh@main
+        continue-on-error: true
+        with:
+          event: refresh
+          device_id: ${{ secrets.NOTIFY_DEVICE_ID }}
+          token: ${{ secrets.NOTIFY_DEVICE_TOKEN }}
+          github_token: ${{ github.token }}
       - name: Create release and upload installers + feeds
         uses: kdroidFilter/Nucleus/.github/actions/publish-release@main
         with:
